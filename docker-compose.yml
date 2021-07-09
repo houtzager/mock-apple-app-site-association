@@ -1,0 +1,22 @@
+services:
+  apache:
+    image: docker.io/bitnami/apache:2.4
+    ports:
+      - 8080:8080
+      - 8081:8443
+    volumes:
+      - ./app:/app
+
+  ngrok:
+    image: wernight/ngrok
+    ports:
+      - "4040:4040"
+    environment:
+      NGROK_PROTOCOL: http
+      NGROK_PORT: apache:8080
+      NGROK_REGION: eu
+      NGROK_DEBUG: 'true'
+    volumes:
+      - ./ngrok:/home/ngrok/.ngrok2/
+    depends_on:
+      - apache
